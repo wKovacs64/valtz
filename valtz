@@ -202,7 +202,7 @@ my %token_validator = (
         # check all parts
         for my $hostpart (split /\./, $s)
         {
-            return 1005 unless $hostpart =~ /^[-a-z0-9]+$/i;
+            return 1005 unless $hostpart =~ /^_?[-a-z0-9]+$/i;
             return 1006 if $hostpart =~ /^-/;
             return 1007 if $hostpart =~ /-$/;
         }
@@ -268,7 +268,7 @@ my %token_validator = (
         # check all parts
         for (split /\./, $s)
         {
-            return 1005 unless /^[-[a-z0-9]+$/i;
+            return 1005 unless /^_?[-[a-z0-9]+$/i;
             return 1006 if /^-/;
             return 1007 if /-$/;
         }
