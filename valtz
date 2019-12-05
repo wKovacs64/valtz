@@ -100,6 +100,9 @@ my %token_name = (
     'min' => 'Minimum time',
     'n' => 'Record type number',
     'rdata' => 'Resource data',
+    'port' => 'Port',
+    'priority' => 'Priority',
+    'weight' => 'Weight'
 );
 
 my %record_type = (
@@ -114,6 +117,7 @@ my %record_type = (
     "'" => 'TXT',
     '^' => 'PTR',
     'C' => 'CNAME',
+    'S' => 'SRV',
     'Z' => 'SOA',
     ':' => 'GENERIC'
 );
@@ -131,6 +135,8 @@ my %line_type = (
     "'" => [ 'TXT', 'fqdn:s:ttl:timestamp:lo', 'fqdn:s' ],
     '^' => [ 'PTR', 'fqdn:p:ttl:timestamp:lo', 'fqdn:p' ],
     'C' => [ 'CNAME', 'fqdn:p:ttl:timestamp:lo', 'fqdn:p' ],
+    'S' => [ 'SRV', 'fqdn:ip:x:port:weight:priority:ttl:timestamp:lo',
+	     'fqdn:x:port' ],
     'Z' => [ 'SOA', 'fqdn:mname:rname:ser:ref:ret:exp:min:ttl:timestamp:lo',
             'fqdn:mname:rname' ],
     ':' => [ 'GENERIC', 'fqdn:n:rdata:ttl:timestamp:lo', 'fqdn:n:rdata' ]
@@ -339,6 +345,21 @@ my %token_validator = (
         my ($type, $s) = @_;
         # TODO : Validation needed? 
         my $result = 0;
+        return $result;
+     }],
+    'port' => [ 21, sub {
+        my ($type, $s) = @_;
+        my $result = validate_integer($s, 65536);
+        return $result;
+    }],
+    'priority' => [ 22, sub {
+        my ($type, $s) = @_;
+        my $result = validate_integer($s, 65536);
+        return $result;
+    }],
+    'weight' => [ 23, sub {
+        my ($type, $s) = @_;
+        my $result = validate_integer($s, 65536);
         return $result;
     }],
 
