@@ -62,7 +62,7 @@ my $perrs_total = 0;
 ##
 # global location registry
 # (reset for every zone file)
-my %loreg; 
+my %loreg;
 
 # NOTE : DO NOT CHANGE the id numbers
 my %validation_msg = (
@@ -152,7 +152,7 @@ sub validate_integer
     {
         my $i = $1;
 
-        $result = 1008 if $boundary && ($i >= $boundary); 
+        $result = 1008 if $boundary && ($i >= $boundary);
     }
     else
     {
@@ -185,11 +185,11 @@ my %token_validator = (
         if ($s =~ /^(\d+)(\.(\d+)(\.(\d+)(\.(\d+))?)?)?$/)
         {
             my ($a, $b, $c, $d) = ($1, $3, $5, $7);
-            $a ||= 0; 
-            $b ||= 0; 
-            $c ||= 0; 
-            $d ||= 0; 
-            if (($a > 255) || ($b > 255) || ($c > 255) || ($d > 255)) 
+            $a ||= 0;
+            $b ||= 0;
+            $c ||= 0;
+            $d ||= 0;
+            if (($a > 255) || ($b > 255) || ($c > 255) || ($d > 255))
             {
                 $result = 1003;
             }
@@ -220,11 +220,11 @@ my %token_validator = (
         if ($s =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)\.?$/)
         {
             my ($a, $b, $c, $d) = ($1, $3, $5, $7);
-            $a ||= 0; 
-            $b ||= 0; 
-            $c ||= 0; 
-            $d ||= 0; 
-            if (($a > 255) || ($b > 255) || ($c > 255) || ($d > 255)) 
+            $a ||= 0;
+            $b ||= 0;
+            $c ||= 0;
+            $d ||= 0;
+            if (($a > 255) || ($b > 255) || ($c > 255) || ($d > 255))
             {
                 $result = 1003
             }
@@ -265,7 +265,7 @@ my %token_validator = (
     's' => [ 10, sub {
         my ($type, $s) = @_;
         my $result = 0;
-        # TODO : Validation needed? 
+        # TODO : Validation needed?
         return $result;
     }],
     'p' => [ 11, sub {
@@ -280,7 +280,7 @@ my %token_validator = (
         }
         return $result;
     }],
-    'mname' => [ 12, sub { 
+    'mname' => [ 12, sub {
         my ($type, $s) = @_;
         my $result = 0;
         # check all parts
@@ -295,7 +295,7 @@ my %token_validator = (
     'rname' => [ 13, sub {
         my ($type, $s) = @_;
         my $result = 0;
-    
+
         # check all parts
         my @parts = split /\./, $s;
         return 1009 if @parts < 3;
@@ -336,14 +336,14 @@ my %token_validator = (
     'n' => [ 19, sub {
         my ($type, $s) = @_;
         my $result = validate_integer($s, 65535);
-    
+
         return 1010 if ($s==2)||($s==5)||($s==6)||($s==12)||($s==15)||($s==252);
 
         return $result;
     }],
     'rdata' => [ 20, sub {
         my ($type, $s) = @_;
-        # TODO : Validation needed? 
+        # TODO : Validation needed?
         my $result = 0;
         return $result;
      }],
@@ -423,7 +423,7 @@ sub validate_line ($)
                             {
                                 $ip = $token;
                             }
-              
+
                             #
                             if (length($ip) && ($mask[$c] eq 'x'))
                             {
@@ -431,14 +431,14 @@ sub validate_line ($)
                                 $tmp =~ s/\.$//;
                                 push @{$$result[3]}, $tmp;
                             }
-                
+
                             # perform validation
-                            
+
                             my $tv = &{$$validator[1]}($type, $token);
                             if ($tv)
                             {
                                 $$result[0] ^= (2 ** $$validator[0]);
-                                $$result[1] .= 
+                                $$result[1] .=
                                   "\npos $c; $mask[$c]; $validation_msg{$tv}";
                             }
                         }
@@ -453,7 +453,7 @@ sub validate_line ($)
 
                             if ($mand)
                             {
-                                $$result[0] ^= (2 ** $$validator[0]); 
+                                $$result[0] ^= (2 ** $$validator[0]);
                                 $$result[1] .= "\npos $c; $mask[$c]; ".
                                 $token_name{$mask[$c]}.' is mandatory';
                             }
@@ -470,7 +470,7 @@ sub validate_line ($)
                     $c++;
                 }
             }
-            
+
             if ($$result[0])
             {
                 $$result[1] = "expected: ".$line_type{$type}->[1]."\n".
@@ -478,7 +478,7 @@ sub validate_line ($)
             }
 
         }
-        else 
+        else
         {
             $result = [ 1, sprintf("unknown record type: #%02x",
                 ord($type)) ];
@@ -488,7 +488,7 @@ sub validate_line ($)
     $$result[1] =~ s/^\n+//;
     $$result[1] =~ s/\n+/\n/g;
 
-    # result is now [ iErrno, sErrtxt, sRecordType, [ sFQDN ] ] 
+    # result is now [ iErrno, sErrtxt, sRecordType, [ sFQDN ] ]
     return $result;
 }
 
@@ -560,7 +560,7 @@ sub read_filter ($$)
             chomp;
             s/^\s+//;
             s/\s+$//;
-            
+
             if (/^(\w+)\s+(.+)$/)
             {
                 my ($key, $value) = ($1, $2);
@@ -689,7 +689,7 @@ sub do_filterfile ($$)
 
     $$f{allowtype} = (keys %{$$f{allowtype}})[0];
     $$f{allowtype} .= $opt{T};
-    
+
     my $allowtyperegex = make_char_regexp($$f{allowtype});
 
     if ($$f{extralog})
@@ -722,7 +722,7 @@ sub do_filterfile ($$)
         {
             next if $zonefile =~ /$FILESUFFIXREGEXP/i;
         }
- 
+
         my $info = 0;
     my $filehandle = \*STDIN;
     my $fopen = 1;
@@ -734,7 +734,7 @@ sub do_filterfile ($$)
         {
             my $temp = ($zonefile eq '-') ? '<STDIN>' : $zonefile;
             p $output, "File $temp";
-    
+
             %loreg = ();
             my $errs = 0;
             my $lno = 0;
@@ -780,12 +780,11 @@ sub do_filterfile ($$)
                                     # Check $$v[3] against allowed fqdn:s:wq!
                                     if (keys %{$$f{deny}})
                                     {
-                                        # 
                                         my $patterns = regexped_patterns($$f{deny});
                                         # Default ALLOW ALL
                                         $ok = $fqdnok = 1;
                                         $reason = 'default allow ^.*$';
-                    
+
                                         for my $pat (@{$patterns})
                                         {
                                             for (@{$$v[3]})
@@ -817,9 +816,9 @@ sub do_filterfile ($$)
                                             }
                                         }
                                     } # if deny/allow
-                                } # if fqdn 
+                                } # if fqdn
                             } # if recordtype ok
-                        } # 
+                        }
 
                         if ($ok && length($line))
                         {
@@ -831,13 +830,13 @@ sub do_filterfile ($$)
                             {
                                 $errs++;
                                 $perrs_total++;
-                                p $output, "  line $lno; err -2; $line"; 
+                                p $output, "  line $lno; err -2; $line";
                                 p $output, "    use of fqdn denied; $reason";
                                 if ($opt{I})
                                 {
-                                    print STDOUT "# line $lno; err -2; $line\n"; 
+                                    print STDOUT "# line $lno; err -2; $line\n";
                                     print STDOUT "#   use of fqdn denied; $reason\n";
-                                }    
+                                }
                             }
                         }
                     }
@@ -853,8 +852,8 @@ sub do_filterfile ($$)
         }
     }
 
-    
-      # Close all extra logfiles
+
+    # Close all extra logfiles
     for my $el (@extralogs)
     {
         if (close($$el[0]))
@@ -889,7 +888,7 @@ my $files = funiq(@ARGV);
 if ($opt{h} || $opt{H} || $opt{'?'})
 {
     print <<"--EOT";
-valtz $VERSION, $COPYRIGHT 
+valtz $VERSION, $COPYRIGHT
 validates tinydns-data zone files
 Usage:
   $0 [-hfFqrRiItTx] <file(s)>
@@ -898,7 +897,7 @@ Usage:
 
 
   -f filter (don't just validate) file and output accepted lines to STDOUT.
-     
+
 
   -F treat files as filter configuration files for more advanced filtering.
      These filterfiles one or several of the following filter directives:
@@ -930,27 +929,27 @@ Usage:
      Multiple zonefile, allow- and deny-lines are allowed, but also the
      alternative file:-line that points to a textfile containing one
      value per line.
-    
-    
+
+
   -r allows fqdn to be empty thus denoting the root.
      This is also allowed per default when doing implict allow - see deny,
      or when specifying 'allow .', i.e. explictly allowing root as such.
      (cannot be combined with deny)
 
-     
+
   -R relaxes the validation and allows empty mname and p-fields.xi
      This is probably not very useful.
 
-     
+
   -i allows the ip-fields to be empty as well. These will then not generate any
      records.
 
 
   -I Include rejected lines as comments in output (valid when filtering).
 
- 
+
   -q Do not echo valid lines to STDOUT.
-    
+
   -s DO NOT ignore files ending with ,v ~ .bak .log .old .swp .tmp
      which is done per default.
 
@@ -984,18 +983,18 @@ All errors in the zonefiles are sent to STDERR.
                 >/etc/tinydns/data.otto \
                 2>/var/log/tinydns/valtz.log
 
-                
+
      Example filterfile for using as import from primary (as above):
        zonefile   /var/zones/external/otto/zone-*
        deny       bodin.org
        deny       x42.com
-       extralog   /var/log/tinydns/external-otto.log    
+       extralog   /var/log/tinydns/external-otto.log
 
      Example #2, strict filter for a certain user editing just A-records
 
        zonefile  /home/felix/zones/zone-fl3x-net
        allow     fl3x.net
-       allowtype + 
+       allowtype +
        extralog  /var/log/tinydns/fl3x-net.log
 
      Example #3, export filter to secondary
@@ -1013,7 +1012,7 @@ All errors in the zonefiles are sent to STDERR.
 elsif (@{$files} == 0)
 {
     print <<"--EOT";
-valtz $VERSION, $COPYRIGHT 
+valtz $VERSION, $COPYRIGHT
 validates tinydns-data zone files
 Usage:
   Simple validation:
@@ -1052,7 +1051,7 @@ else
         {
             next if $zonefile =~ /$FILESUFFIXREGEXP/i;
         }
-    
+
     my $filehandle = \*STDIN;
     my $fopen = 1;
     if ($zonefile ne '-')
@@ -1084,7 +1083,7 @@ else
                         {
                              print STDOUT "# line $lno; err $$v[0] $line
                              print STDOUT "# $$v[1]; \n";
-                        }    
+                        }
                     }
                     else
                     {
